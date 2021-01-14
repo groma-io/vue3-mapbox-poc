@@ -21,7 +21,7 @@ export default {
         landview_arguments: {
           base_url: 'https://tiles.makeloveland.com',
           url: '/api/v1/parcels?format=mvt&token=',
-          accessToken: process.env.VUE_APP_LANDVIEW_TOKEN,
+          accessToken: process.env.VUE_APP_LANDVIEWTOKEN,
           
           
         },
@@ -33,7 +33,7 @@ export default {
           zoom: 15,
           html_container: 'mapid',
           style: 'mapbox://styles/mapbox/outdoors-v11',
-          // accessToken: ,
+          accessToken: process.env.VUE_APP_MAPBOXTOKEN,
           center: [-93.79956230521202, 41.71010074072029]
           // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
           
@@ -41,14 +41,13 @@ export default {
       }
     },
     mounted() {
-      console.log(process.env.VUE_APP_MAPBOX_TOKEN);
-      // mapboxgl.accessToken =  process.env.VUE_APP_MAPBOX_TOKEN /* global mapboxgl */
-      // this.map = new mapboxgl.Map({
-      //     container: this.mapbox_arguments.html_container,
-      //     style: this.mapbox_arguments.style, // stylesheet location
-      //     center: this.mapbox_arguments.center, // starting position [lng, lat]
-      //     zoom: this.mapbox_arguments.zoom // starting zoom
-      // });
+      mapboxgl.accessToken =  this.mapbox_arguments.accessToken /* global mapboxgl */
+      this.map = new mapboxgl.Map({
+          container: this.mapbox_arguments.html_container,
+          style: this.mapbox_arguments.style, // stylesheet location
+          center: this.mapbox_arguments.center, // starting position [lng, lat]
+          zoom: this.mapbox_arguments.zoom // starting zoom
+      });
       // this.map.showTileBoundaries = true;
     },
     computed() {
@@ -56,33 +55,33 @@ export default {
     },
     
     created() {
-      // let url = this.landview_arguments.base_url + this.landview_arguments.url + this.landview_arguments.accessToken;
-      // axios.get(url)
-      // .then(response => {
-      //   this.landview_layer_data = response.data;
-      //   this.map.addSource(this.landview_layer_data.id, {
-      //       type: 'vector',
-      //       tiles: this.landview_layer_data.tiles
-      //     });
+      let url = this.landview_arguments.base_url + this.landview_arguments.url + this.landview_arguments.accessToken;
+      axios.get(url)
+      .then(response => {
+        this.landview_layer_data = response.data;
+        this.map.addSource(this.landview_layer_data.id, {
+            type: 'vector',
+            tiles: this.landview_layer_data.tiles
+          });
           
-      //   this.map.addLayer({
-      //     'id': 'parcels',
-      //     'type': 'line',
-      //     'source': this.landview_layer_data.id,
-      //     'source-layer': this.landview_layer_data.id,
-      //     'minzoom': 13,
-      //     'maxzoom': 20,
-      //     layout: {
-      //       visibility: 'visible'
-      //     },
-      //     'paint': {
-      //       'line-color': '#649d8d'
-      //     }
-      //   });          
-      // })
-      // .catch(e => {
-      //   console.log(e);
-      // })
+        this.map.addLayer({
+          'id': 'parcels',
+          'type': 'line',
+          'source': this.landview_layer_data.id,
+          'source-layer': this.landview_layer_data.id,
+          'minzoom': 13,
+          'maxzoom': 20,
+          layout: {
+            visibility: 'visible'
+          },
+          'paint': {
+            'line-color': '#649d8d'
+          }
+        });          
+      })
+      .catch(e => {
+        console.log(e);
+      })
     },
 
       // this.map.addSource('mapbox-dem', {
