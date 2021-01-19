@@ -30,9 +30,9 @@ export default {
           // id: 'mapbox/satellite-v9',
           // tileSize: 512,
           // zoomOffset: -1,
-          zoom: 15,
+          zoom: 4,
           html_container: 'mapid',
-          style: 'mapbox://styles/mapbox/outdoors-v11',
+          style: 'mapbox://styles/' + process.env.VUE_APP_MAPBOXSTYLE,
           accessToken: process.env.VUE_APP_MAPBOXTOKEN,
           center: [-93.79956230521202, 41.71010074072029]
           // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -48,6 +48,7 @@ export default {
           center: this.mapbox_arguments.center, // starting position [lng, lat]
           zoom: this.mapbox_arguments.zoom // starting zoom
       });
+
       // this.map.showTileBoundaries = true;
     },
     computed() {
@@ -55,33 +56,67 @@ export default {
     },
     
     created() {
-      let url = this.landview_arguments.base_url + this.landview_arguments.url + this.landview_arguments.accessToken;
-      axios.get(url)
-      .then(response => {
-        this.landview_layer_data = response.data;
-        this.map.addSource(this.landview_layer_data.id, {
-            type: 'vector',
-            tiles: this.landview_layer_data.tiles
-          });
-          
-        this.map.addLayer({
-          'id': 'parcels',
-          'type': 'line',
-          'source': this.landview_layer_data.id,
-          'source-layer': this.landview_layer_data.id,
-          'minzoom': 13,
-          'maxzoom': 20,
-          layout: {
-            visibility: 'visible'
-          },
-          'paint': {
-            'line-color': '#649d8d'
-          }
-        });          
-      })
-      .catch(e => {
-        console.log(e);
-      })
+
+      // let url = this.landview_arguments.base_url + this.landview_arguments.url + this.landview_arguments.accessToken;
+      // axios.get(url)
+      // .then(response => {
+        // this.map.addSource('my-data', {
+        //   type: 'vector',
+        //   url: ''
+        // });
+        // this.map.addLayer({
+        //   'id': 'mogul',
+        //   'source': 'my-data',
+        //   'minzoom': 13,
+        //   'maxzoom': 20,
+        //   "type": "fill",
+        //   "paint": {
+        //     "fill-color": "#00ffff"
+        //   },
+        //   "source-layer": "circle"          
+        //   // layout: {
+        //   //   visibility: 'visible'
+        //   // },
+        //   // 'paint': {
+        //   //   'line-color': '#649d8d'
+        //   // }
+        // });  
+      // })
+      // .catch(e => {
+      //   console.log(e);
+      // })
+
+      // let url = this.landview_arguments.base_url + this.landview_arguments.url + this.landview_arguments.accessToken;
+      // axios.get(url)
+      // .then(response => {
+      //   this.landview_layer_data = response.data;
+        // this.map.addSource(this.landview_layer_data.id, {
+        //     type: 'vector',
+        //     tiles: this.landview_layer_data.tiles
+        //   });
+        // this.map.addLayer({
+        //   'id': 'parcels',
+        //   'type': 'line',
+        //   'source': this.landview_layer_data.id,
+        //   'source-layer': this.landview_layer_data.id,
+        //   'minzoom': 13,
+        //   'maxzoom': 20,
+        //   layout: {
+        //     visibility: 'visible'
+        //   },
+        //   'paint': {
+        //     'line-color': '#649d8d'
+        //   }
+        // });          
+      // })
+      // .catch(e => {
+      //   console.log(e);
+      // })
+      // this.map.addSource('my-data', {
+      //   type: 'vector',
+      //   url: ''
+      // });          
+
     },
 
       // this.map.addSource('mapbox-dem', {
